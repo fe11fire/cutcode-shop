@@ -4,13 +4,14 @@
     
 
 @section('content')
-<x-forms.auth-forms title="Забыли пароль" action="{{ route('signIn') }}" method="POST">
+<x-forms.auth-forms title="Забыли пароль" action="{{ route('password.email') }}" method="POST">
     @csrf
     <x-forms.text-input name="email" type="email" value="{{ old('email') }}" placeholder="E-mail" :isError="$errors->has('email')" required="true"/>
     @error('email')
         <x-forms.error>{{ $message }}</x-forms.error>
     @enderror
     
+    <x-slot:socialAuth></x-slot:socialAuth>
     <x-forms.primary-button>Отправить</x-forms.primary-button>
     <x-slot:buttons>
         <div class="space-y-3 mt-5">
