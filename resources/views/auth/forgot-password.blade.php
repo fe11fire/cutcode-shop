@@ -4,7 +4,7 @@
     
 
 @section('content')
-<x-forms.auth-forms title="Забыли пароль" action="{{ route('password.email') }}" method="POST">
+<x-forms.auth-forms title="Забыли пароль" action="{{ route('forgot.handle') }}" method="POST">
     @csrf
     <x-forms.text-input name="email" type="email" value="{{ old('email') }}" placeholder="E-mail" :isError="$errors->has('email')" required="true"/>
     @error('email')

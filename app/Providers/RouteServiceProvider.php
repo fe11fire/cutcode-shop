@@ -2,17 +2,19 @@
 
 namespace App\Providers;
 
-use App\Contracts\RouteRegistrar;
+use App\Contracts\RouteRegistrar as ContractsRouteRegistrar;
+use LDAP\Result;
+use RuntimeException;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Routing\AppRegistrar;
+use Illuminate\Support\Facades\Route;
 use Domain\Auth\Routing\AuthRegistrar;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Contracts\Routing\Registrar;
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Facades\Route;
-use LDAP\Result;
-use RuntimeException;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Routing\RouteRegistrar;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -70,7 +72,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapRoutes(Registrar $router, array $registrars): void
     {
         foreach ($registrars as $registrar) {
-            if (!class_exists($registrar) || !is_subclass_of($registrar, RouteRegistrar::class)) {
+            if (!class_exists($registrar) || !is_subclass_of($registrar, ContractsRouteRegistrar::class)) {
                 throw new RuntimeException(
                     sprintf(
                         'Cannot map routes \'%s\', it is not a valid routes class',
