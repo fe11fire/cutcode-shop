@@ -1,7 +1,6 @@
 @extends('layouts.auth')
 
 @section('title', 'Восстановление пароля')
-    
 
 @section('content')
 <x-forms.auth-forms title="Восстановление пароля" action="{{ route('password.update') }}" method="POST">
@@ -24,4 +23,4 @@
     <x-slot:buttons></x-slot:buttons>
     <x-forms.primary-button>Обновить пароль</x-forms.primary-button>
 </x-forms.auth-forms>
-@endsection[]
+@endsection

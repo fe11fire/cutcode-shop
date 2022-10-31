@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace Domain\Auth\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -26,5 +26,10 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         //
+    }
+
+    public function register(): void
+    {
+        $this->app->register(ActionsServiceProvider::class);
     }
 }
