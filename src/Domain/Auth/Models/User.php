@@ -12,7 +12,6 @@ use Laravel\Sanctum\HasApiTokens;
 
 /**
  * @method static Builder|User query()
- * @method static Builder|User factory()
  */
 
 class User extends Authenticatable
@@ -52,4 +51,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected static function newFactory()
+    {
+        return UserFactory::new();
+    }
 }
