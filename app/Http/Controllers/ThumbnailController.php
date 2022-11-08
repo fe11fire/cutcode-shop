@@ -18,14 +18,15 @@ class ThumbnailController extends Controller
 
         $storage = Storage::disk('images');
 
-        $realPath = "$dir/$file.jpg";
+        $realPath = "$dir/$file";
         $newDirPath = "$dir/$method/$size";
-        $resultPath = "$newDirPath/$file.jpg";
-
+        $resultPath = "$newDirPath/$file";
+        // dd($newDirPath);
         if (!$storage->exists($newDirPath)) {
+            // dd($storage);
             $storage->makeDirectory($newDirPath);
         }
-        // dd($size);
+        // dd($storage->path($realPath));
         if (!$storage->exists($resultPath)) {
             $image = Image::make($storage->path($realPath));
             [$w, $h] = explode('x', $size);
