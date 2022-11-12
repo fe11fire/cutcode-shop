@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\App\Http\Controllers;
+namespace Tests\Feature\App\Http\Controllers\Auth;
 
 use Tests\TestCase;
 use Domain\Auth\Models\User;
@@ -10,10 +10,25 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\SignInController;
+use Database\Factories\UserFactory;
 
 class ResetPasswordControllerTest extends TestCase
 {
     use RefreshDatabase;
+
+    private string $token;
+
+    private User $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = UserFactory::new()->create();
+        $this->token = Password::createToken($this->user);
+    }
+
 
     /**
      * @test
@@ -21,8 +36,7 @@ class ResetPasswordControllerTest extends TestCase
      */
     public function it_page_success(): void
     {
-        $token = '1111';
-        $this->get(action([ResetPasswordController::class, 'page'], $token))
+        $this->get(action([ResetPasswordController::class, 'page'], $this->token))
             ->assertOk()
             ->assertViewIs('auth.reset-password');
     }
@@ -31,9 +45,34 @@ class ResetPasswordControllerTest extends TestCase
      * @test
      * @return void
      */
+    public function it_handle(): void
+    {
+        $password = '12345678';
+        $password_confirmation = '12345678';
+
+        Password::shouldReceive('reset')->once()->withSomeOfArgs([
+            'email' => $this->user->email,
+            'password' => $password,
+            'password_confirmation' => $password_confirmation,
+            'token' => $this->token
+        ])->andReturn(Password::PASSWORD_RESET);
+
+        $response = $this->post(action([ResetPasswordController::class, 'handle']), [
+            'email' => $this->user->email,
+            'password' => $password,
+            'password_confirmation' => $password_confirmation,
+            'token' => $this->token
+        ]);
+
+        $response->assertRedirect(action([SignInController::class, 'page']));
+    }
+
+    /**
+     * @test
+     * @return void
+     */
     public function it_handle_success(): void
     {
-        Notification::fake();
         Event::fake();
 
         $email = 'mail@mail.ru';
@@ -66,6 +105,4 @@ class ResetPasswordControllerTest extends TestCase
         $response->assertValid();
         $response->assertRedirect(route('login'));
     }
-
-   
 }

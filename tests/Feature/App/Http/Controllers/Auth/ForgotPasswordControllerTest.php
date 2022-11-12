@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\App\Http\Controllers;
+namespace Tests\Feature\App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use Database\Factories\UserFactory;
@@ -30,8 +30,6 @@ class ForgotPasswordControllerTest extends TestCase
      */
     public function it_handle_success(): void
     {
-        Notification::fake();
-
         $email = 'mail@mail.ru';
 
         $user = UserFactory::new()->create([
@@ -43,12 +41,30 @@ class ForgotPasswordControllerTest extends TestCase
         ];
 
         $response = $this->post(action([ForgotPasswordController::class, 'handle']), $request);
-        $response->assertValid();
-        $response->assertStatus(302);
+        $response->assertRedirect();
         Notification::assertSentTo($user, ResetPassword::class);
 
         $response = $this->post(action([ForgotPasswordController::class, 'handle']), $request);
         $response->assertSessionHasErrors(['email']);
         $response->assertStatus(302);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function it_handle_fail(): void
+    {
+        $email = 'mail@mail.ru';
+
+        $this->assertDatabaseMissing('users', [
+            'email' => $email,
+        ]);
+
+        $this->post(action([ForgotPasswordController::class, 'handle']), [
+            'email' => $email,
+        ])->assertInvalid(['email']);
+
+        Notification::assertNothingSent();
     }
 }

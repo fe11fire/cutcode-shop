@@ -3,18 +3,15 @@
 namespace App\Providers;
 
 use App\Contracts\RouteRegistrar as ContractsRouteRegistrar;
-use LDAP\Result;
 use RuntimeException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Routing\AppRegistrar;
-use Illuminate\Support\Facades\Route;
-use Domain\Auth\Routing\AuthRegistrar;
+use App\Routing\AuthRegistrar;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Contracts\Routing\Registrar;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
-use Illuminate\Routing\RouteRegistrar;
 
 class RouteServiceProvider extends ServiceProvider
 {

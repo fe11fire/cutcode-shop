@@ -1,6 +1,6 @@
 <?php
 
-namespace Domain\Auth\Routing;
+namespace App\Routing;
 
 use App\Contracts\RouteRegistrar;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -39,8 +39,10 @@ class AuthRegistrar implements RouteRegistrar
             });
 
             Route::controller(SocialAuthController::class)->group(function () {
+
+                Route::get('/auth/socialite/{driver}/callback', 'callback')->name('socialite.callback');
+
                 Route::get('/auth/socialite/{driver}', 'redirect')->name('socialite.redirect');
-                Route::post('/auth/socialite/{driver}/callback', 'callback')->name('socialite.callback');
             });
 
             // Route::controller(AuthController::class)->group(function () {

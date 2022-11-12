@@ -4,10 +4,10 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use App\Models\Brand;
-use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Database\Seeder;
+use Domain\Catalog\Models\Brand;
+use Domain\Catalog\Models\Category;
 
 class DatabaseSeeder extends Seeder
 {

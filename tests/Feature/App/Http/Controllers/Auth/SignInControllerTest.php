@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\App\Http\Controllers;
+namespace Tests\Feature\App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Auth\SignInController;
 use App\Http\Requests\SignInFormRequest;
@@ -54,6 +54,22 @@ class SignInControllerTest extends TestCase
      * @test
      * @return void
      */
+    public function it_handle_fail(): void
+    {
+        $request = SignInFormRequest::factory()->create([
+            'email' => 'notf@email.ru',
+            'password' => '1111111111111111',
+        ]);
+
+        $this->post(action([SignInController::class, 'handle']), $request)->assertInvalid(['email']);
+
+        $this->assertGuest();
+    }
+
+    /**
+     * @test
+     * @return void
+     */
     public function it_logout_success(): void
     {
         $email = 'mail@mail.ru';
@@ -66,5 +82,14 @@ class SignInControllerTest extends TestCase
         $this->actingAs($user)->delete(action([SignInController::class, 'logOut']));
 
         $this->assertGuest();
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function it_logout_guest_middleware_fail(): void
+    {
+        $this->delete(action([SignInController::class, 'logOut']))->assertRedirect(route('home'));
     }
 }

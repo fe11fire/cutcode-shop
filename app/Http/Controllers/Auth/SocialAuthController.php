@@ -21,20 +21,21 @@ class SocialAuthController extends Controller
 
     public function callback(string $driver): RedirectResponse
     {
+
         if ($driver !== 'github') {
             throw new DomainException('Драйвер не поддерживается');
         }
         $githubUser = Socialite::driver($driver)->user();
 
         $user = User::query()->updateOrCreate([
-            'github_id' => $githubUser->id,
+            $driver . '_id' => $githubUser->getId(),
         ], [
-            'name' => $githubUser->name,
-            'email' => $githubUser->email,
-            'password' => bcrypt('11111111'),
-            // 'github_token' => $githubUser->token,
-            // 'github_refresh_token' => $githubUser->refreshToken,
+            'name' => $githubUser->getName(),
+            'email' => $githubUser->getEmail(),
+            'password' => bcrypt('12345678'),
         ]);
+
+
 
         auth()->login($user);
 
