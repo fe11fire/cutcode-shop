@@ -13,13 +13,15 @@ class AppRegistrar implements RouteRegistrar
     public function map(Registrar $registrar): void
     {
         Route::middleware('web')->group(function () {
-            Route::get('/', HomeController::class)->name('home');
-            // dd('111');
-            Route::get('/storage/images/{dir}/{method}/{size}/{file}', ThumbnailController::class)
+            // dd('1');
+            Route::get('/storage/public/images/{dir}/{method}/{size}/{file}/get', ThumbnailController::class)
                 ->where('method', 'resize|crop|fit')
                 ->where('size', '\d+x\d+')
                 // ->where('file', '.+\.(png|jpg|gif|bmp|jpeg)$')
                 ->name('thumbnail');
+            Route::get('/', HomeController::class)->name('home');
+            // dd('111');
+
         });
     }
 }

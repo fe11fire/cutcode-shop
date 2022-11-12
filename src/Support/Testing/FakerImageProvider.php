@@ -24,7 +24,7 @@ class FakerImageProvider extends Base
 
 
         if (Storage::exists($storage_filename)) {
-            return '/storage/' . $storage_filename;
+            return '/storage/public/' . $storage_filename;
         }
 
         $file = base_path('/tests/Fixtures/' . $folder . '/') . $filename;
@@ -34,6 +34,6 @@ class FakerImageProvider extends Base
             file_get_contents($file),
         );
 
-        return '/storage/' . $storage_filename;
+        return '/storage/public/' . $storage_filename;
     }
 }

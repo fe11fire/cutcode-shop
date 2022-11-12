@@ -5,12 +5,16 @@ namespace Domain\Catalog\Models;
 use App\Models\Product;
 use Support\Traits\Models\HasSlug;
 use Database\Factories\CategoryFactory;
+use Domain\Catalog\Collections\CategoryCollection;
 use Illuminate\Database\Eloquent\Model;
 use Support\Traits\Models\HasThumbnail;
-use Illuminate\Database\Eloquent\Builder;
+use Domain\Catalog\QueryBuilders\CategoryQueryBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+/**
+ * @method static Category|CategoryQueryBuilder query()
+ */
 class Category extends Model
 {
     use HasFactory;
@@ -32,9 +36,14 @@ class Category extends Model
         return 'categories';
     }
 
-    public function scopeHomePage(Builder $query)
+    public function newCollection(array $models = []): CategoryCollection
     {
-        $query->where('on_home_page', true)->orderBy('sorting')->limit(6);
+        return new CategoryCollection($models);
+    }
+
+    public function newEloquentBuilder($query): CategoryQueryBuilder
+    {
+        return new CategoryQueryBuilder($query);
     }
 
     public function products(): BelongsToMany

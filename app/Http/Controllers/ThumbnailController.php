@@ -13,7 +13,6 @@ class ThumbnailController extends Controller
         string $size,
         string $file,
     ) {
-        // dd($size);
         abort_if(!in_array($size, config('thumbnail.allowed_sizes', [])), 403, ' size not allowed');
 
         $storage = Storage::disk('images');
