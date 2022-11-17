@@ -21,6 +21,7 @@ class CatalogController extends Controller
             ->when($category->exists, function (Builder $query) use ($category) {
                 $query->whereRelation('categories', 'categories.id', '=', $category->id);
             })
+            ->searched()
             ->filtered()
             ->sorted()
             ->paginate(9);

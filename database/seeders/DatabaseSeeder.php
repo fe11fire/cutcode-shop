@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use App\Events\BrandCategoryCreatedUpdated;
 use App\Models\Product;
 use Illuminate\Database\Seeder;
 use Domain\Catalog\Models\Brand;
@@ -21,7 +20,6 @@ class DatabaseSeeder extends Seeder
     {
         Brand::factory(20)->create();
         Category::factory(10)->has(Product::factory(rand(5, 15)))->create();
-        event(new BrandCategoryCreatedUpdated());
         // Product::factory(20)->has(Category::factory(rand(1, 3)))->create();
     }
 }

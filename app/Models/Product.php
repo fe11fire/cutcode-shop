@@ -27,6 +27,7 @@ class Product extends Model
         'brand_id',
         'on_home_page',
         'sorting',
+        'text',
     ];
 
     protected $casts = [
@@ -62,6 +63,13 @@ class Product extends Model
                 $direction = $column->contains('-') ? 'DESC' : 'ASC';
                 $q->orderBy((string) $column->remove('-'), $direction);
             }
+        });
+    }
+
+    public function scopeSearched(Builder $query)
+    {
+        $query->when(request('s'), function (Builder $q) {
+            $q->whereFullText(['title', 'text'], request('s'));
         });
     }
 
