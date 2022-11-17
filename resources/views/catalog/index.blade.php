@@ -19,7 +19,10 @@
 
 				<!-- Categories -->
 				<div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-5 mt-8">
-                    @each('catalog.shared.category', $categories, 'item')
+					@foreach ($categories as $item)
+						@include('catalog.shared.category', ['item' => $item, 'category' => $category])
+					@endforeach
+                    {{-- @each('catalog.shared.category', $categories, 'item') --}}
 				</div>
 			</section>
 

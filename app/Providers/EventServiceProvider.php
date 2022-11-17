@@ -4,9 +4,12 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
-use App\Listeners\BrandCategoryCacheReset;
-use App\Events\BrandCategoryCreatedUpdated;
 use App\Listeners\SendEmailNewUserListener;
+use App\Models\Product;
+use App\Observers\BrandObserver;
+use App\Observers\CategoryObserver;
+use Domain\Catalog\Models\Brand;
+use Domain\Catalog\Models\Category;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -22,9 +25,6 @@ class EventServiceProvider extends ServiceProvider
             // SendEmailVerificationNotification::class,
             SendEmailNewUserListener::class
         ],
-        BrandCategoryCreatedUpdated::class => [
-            BrandCategoryCacheReset::class
-        ]
     ];
 
     /**
@@ -34,7 +34,8 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Brand::observe(new BrandObserver());
+        Category::observe(new CategoryObserver());
     }
 
     /**
