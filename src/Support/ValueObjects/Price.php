@@ -15,11 +15,11 @@ class Price implements Stringable
     ];
 
     public function __construct(
-        private readonly int $value,
-        private readonly string $currency = 'RUB',
-        private readonly int $precision = 100,
+        private int $value,
+        private string $currency = 'RUB',
+        private int $precision = 100,
     ) {
-        if ($value < 0) {
+        if ($this->value < 0) {
             throw new InvalidArgumentException('Price must be more than 0');
         }
 
