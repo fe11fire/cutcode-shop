@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Pipeline\Pipeline;
 
 class Product extends Model
 {
@@ -46,13 +47,17 @@ class Product extends Model
 
     public function scopeFiltered(Builder $query)
     {
-        $query->when(request('filters.brands'), function (Builder $q) {
-            $q->whereIn('brand_id', request('filters.brands'));
-        })->when(request('filters.price.from'), function (Builder $q) {
-            $q->where('price', '>', request('filters.price.from', 0) * 100);
-        })->when(request('filters.price.to'), function (Builder $q) {
-            $q->where('price', '<', request('filters.price.to', 100000) * 100);
-        });
+        return app(Pipeline::class)
+            ->send($query)
+            ->through(filters())
+            ->thenReturn();
+        // $query->when(request('filters.brands'), function (Builder $q) {
+        //     $q->whereIn('brand_id', request('filters.brands'));
+        // })->when(request('filters.price.from'), function (Builder $q) {
+        //     $q->where('price', '>', request('filters.price.from', 0) * 100);
+        // })->when(request('filters.price.to'), function (Builder $q) {
+        //     $q->where('price', '<', request('filters.price.to', 100000) * 100);
+        // });
     }
 
     public function scopeSorted(Builder $query)

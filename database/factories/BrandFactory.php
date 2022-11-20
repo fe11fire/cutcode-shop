@@ -23,7 +23,7 @@ class BrandFactory extends Factory
         return [
             'title' => $this->faker->company(),
             //TODO
-            'thumbnail' => $this->faker->image('images/brands'),
+            'thumbnail' => $this->faker->image('brands'),
             'on_home_page' =>  $this->faker->boolean(),
             'sorting' => $this->faker->numberBetween(1, 999),
         ];

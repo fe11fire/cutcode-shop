@@ -13,7 +13,6 @@ class CatalogController extends Controller
 {
     public function __invoke(?Category $category)
     {
-        $brands = Brand::query()->has('products')->get();
         $categories = Category::query()->has('products')->get();
 
         $products = Product::query()
@@ -33,7 +32,6 @@ class CatalogController extends Controller
             [
                 'categories' => $categories,
                 'products' => $products,
-                'brands' => $brands,
                 'category' => $category,
             ]
         );

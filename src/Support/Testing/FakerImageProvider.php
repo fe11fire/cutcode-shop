@@ -13,27 +13,16 @@ class FakerImageProvider extends Base
 
     public function image(string $folder): string
     {
-        if (!Storage::exists($folder)) {
-            Storage::makeDirectory($folder);
+        $storage = Storage::disk('images');
+
+        // dd($storage);
+
+        if (!$storage->exists($folder)) {
+            $storage->makeDirectory($folder);
         }
-        $files = FacadesFile::files(base_path('/tests/Fixtures/' . $folder));
+        /** @var Storage $storage */
+        $file = $this->generator->file(base_path('/tests/Fixtures/images/') . $folder, $storage->path($folder), false);
 
-        // dd($files[rand(0, (count($files) - 1))]->getFilenameWithoutExtension());
-        $filename = $files[rand(0, (count($files) - 1))]->getRelativePathname();
-        $storage_filename = '' . $folder . '/' . Str::random(10) . '.jpg';
-
-
-        if (Storage::exists($storage_filename)) {
-            return '/storage/' . $storage_filename;
-        }
-
-        $file = base_path('/tests/Fixtures/' . $folder . '/') . $filename;
-        // dd($file);
-        Storage::put(
-            $storage_filename,
-            file_get_contents($file),
-        );
-
-        return '/storage/public/' . $storage_filename;
+        return '/storage/public/images/' . $file;
     }
 }
